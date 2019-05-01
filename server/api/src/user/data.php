@@ -1,7 +1,7 @@
 <?php
-    require '../connection.php';
-
     function save_user($data){
+
+        require '../connection.php';
 
         $top = "
             INSERT INTO

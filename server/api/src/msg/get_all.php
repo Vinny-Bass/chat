@@ -15,8 +15,8 @@ function response($status,$status_message,$data) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if(get_infos($data)) {
-	response(200, "Informações resgatadas", NULL);	
+if($result = get_all($data)) {
+	response(200, "Mensagens encontradas", $result);	
 } else {
-	response(200, "Informações sobre o usuario não existem", NULL);
+	response(200, "Nenhuma mensagem encontrada", NULL);
 }
