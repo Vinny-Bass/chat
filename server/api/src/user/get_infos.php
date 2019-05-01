@@ -15,8 +15,8 @@ function response($status,$status_message,$data) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if($result = login($data)) {
-	response(200, "Usuario Logado", $result);	
+if($result = get_infos($data)) {
+	response(200, "Informações resgatadas", $result);	
 } else {
-	response(200, "Usuario não encontrado", NULL);
+	response(200, "Informações sobre o usuario não existem", NULL);
 }

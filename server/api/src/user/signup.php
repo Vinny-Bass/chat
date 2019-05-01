@@ -1,6 +1,6 @@
 <?php 
 header("Content-Type:application/json");
-require 'data.php';
+require 'data.php'; 
 
 $data = json_decode(file_get_contents('php://input'), true);
 

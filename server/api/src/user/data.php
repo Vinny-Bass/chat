@@ -56,13 +56,30 @@
 
     function login($data) 
     {
+        require '../connection.php';
+
         $email = $data['email'];
         $pass = $data['pass'];
 
         $query = "SELECT id FROM user WHERE email = '$email' AND password = '$pass'";
 
         if($result = mysqli_query($db, $query)) {
-            return mysqli_fetch_array($result);
+            return mysqli_fetch_assoc($result);
+        } else {
+            return false;
+        }
+    }
+
+    function get_infos($data)
+    {
+        require '../connection.php';
+        
+        $id_user = $data['id'];
+
+        $query  ="SELECT * FROM user WHERE id = '$id_user'";
+
+        if($result = mysqli_query($db, $query)) {
+            return mysqli_fetch_assoc($result);
         } else {
             return false;
         }
