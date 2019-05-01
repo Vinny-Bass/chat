@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ice Breaker | Chat</title>
+
+    <link rel="shortcut icon" type="image/png" href="../../img/icon/snow.png"/>
+    <link rel="stylesheet" href="../../css/signup.css">
+
+</head>
+<body>
+
+    <main class="login signup" id="app">
+        <h2 class="title">Cadastro</h2>
+
+        <section class="login-section">
+            <div id="code-form">
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Código" 
+                        class="input-text" 
+                        v-model="code.text"
+                        v-bind:class="{error: code.hasError}" />
+                    <span class="error-field" v-if="code.hasError">
+                        {{code.error}}
+                    </span>
+                </label>
+            </div>
+            
+            <div id="signup-form" v-if="code.valid">
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Nome" 
+                        class="input-text"
+                        v-model="name.text"
+                        v-bind:class="{error: name.hasError}" />
+                    <span class="error-field" v-if="name.hasError">
+                        {{name.error}}
+                    </span>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="email" 
+                        placeholder="E-mail"
+                        class="input-text"
+                        v-model="mail.text"
+                        v-bind:class="{error: mail.hasError}"/>
+                    <span class="error-field" v-if="mail.hasError">
+                        {{mail.error}}
+                    </span>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Nascimento" 
+                        class="input-text" 
+                        onfocus="(this.type='date')"
+                        v-model="birth"/>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="País de nascimento" 
+                        name="country" 
+                        class="input-text"
+                        v-model="nationality"/>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Título" 
+                        class="input-text"
+                        v-model="title"/>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Campo de pesquisa"
+                        class="input-text"
+                        v-model="research"
+                        />
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Nível de graduação" 
+                        class="input-text"
+                        v-model="collegeDegree"/>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="text" 
+                        placeholder="Base atual"
+                        class="input-text"
+                        v-model="workLocation"/>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="password" 
+                        placeholder="Senha" 
+                        v-bind:class="{error: password.hasError}" 
+                        class="input-text" 
+                        v-model="password.text"/>
+                    <span class="error-field" v-if="password.hasError">
+                        {{password.error}}
+                    </span>
+                </label>
+                <label class="input-label">
+                    <input 
+                        type="password" 
+                        placeholder="Senha" 
+                        v-bind:class="{error: password.hasError}" 
+                        class="input-text" 
+                        v-model="password.confirm"/>
+                    <span class="error-field" v-if="password.hasError">
+                        {{password.error}}
+                    </span>
+                </label>
+            </div>
+            
+
+            <button type="submit" class="btn send-signup" v-on:click="sendUser">Validar</button>
+
+            <div class="login-options">
+                <a href="../" class="link">Já tem usuário?</a>
+            </div>
+        </section>
+        <span class="loader" v-if="loading"><span class="loader-inner"></span></span>
+    </main>
+
+<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+<script src="../../js/lib/axios.min.js"></script>
+<script type="text/javascript" src="../../js/constants.js"></script>
+<script type="text/javascript" src="../../js/signup.js"></script>
+
+</body>
+</html>

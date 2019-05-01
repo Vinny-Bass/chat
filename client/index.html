@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ice Breaker | Chat</title>
+
+    <link rel="shortcut icon" type="image/png" href="img/icon/snow.png"/>
+    <link rel="stylesheet" href="css/chat.css">
+
+</head>
+<body>
+
+    <section id="app" class="chat">
+
+        <aside class="user-area">
+            <!--<h3>{{user}}</h3>-->
+            <input type="text" v-model="user" class="input-user-name"/>
+            <span>Doutor</span>
+            <span>Cientista de eventos polares</span>
+            <span>Pinguins</span>
+            <span>Polo Sul - A34</span>
+            <span>19 anos</span>
+            <span>erick@mail.com</span>
+            <span>Brasil</span>
+            <span v-if="results">BTC agora -> ${{results.BTC.USD}}</span>
+        </aside>
+
+        <main class="chat-area">
+            <header class="chat-header">
+            Ice Breaker | Chat principal
+            <small v-if="status" :style="{ color: status.color }">{{status.text}}</small>
+            </header>
+            <div class="chat-history" id="messages">
+                <ul class="messages" v-cloak>
+                    <li class="message" 
+                    v-for="message in messages"
+                    v-bind:class="{ messageright: user == message.user }">
+                        <p class="message-header">
+                            <i class="seen-icon"></i>
+                            <span class="message-header-time" v-if="message.date">{{message.date}}</span>
+                            <strong class="message-header-user" v-if="message.user">{{ message.user }}</strong>
+                        </p>
+                        <p class="message-body">
+                            {{ message.text }}
+                        </p> 
+                    </li>
+                </ul>
+            </div>
+            <div class="new-message">
+                <textarea placeholder="Escreva sua mensagem..." class="input-text" v-model="text"
+                @keyup.enter="sendMessage"></textarea>
+                <button class="btn" v-on:click="sendMessage">Enviar</button>
+            </div>
+
+            <span class="loader" v-if="loading"><span class="loader-inner"></span></span>
+        </main>
+
+    </section>
+
+    <script type="text/javascript" src="js/lib/vue.min.js"></script>
+    <script src="js/lib/axios.min.js"></script>
+    <script type="text/javascript" src="js/constants.js"></script>
+    <script type="text/javascript" src="js/chat.js"></script>
+
+</body>
+</html>

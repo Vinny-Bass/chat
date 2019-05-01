@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ice Breaker | Chat</title>
+
+    <link rel="shortcut icon" type="image/png" href="../img/icon/snow.png"/>
+    <link rel="stylesheet" href="../css/login.css">
+
+</head>
+<body>
+
+    <main class="login" id="app">
+        <h2 class="title">Login</h2>
+
+        <section class="login-section" id="login-form">
+            <label class="input-label">
+                <input 
+                    type="email" 
+                    placeholder="E-mail" 
+                    v-bind:class="{error: mail.hasError}" 
+                    class="input-text" 
+                    v-model="mail.text"/>
+                <span class="error-field" v-if="mail.hasError">
+                    {{mail.error}}
+                </span>
+            </label>
+            
+            <label class="input-label">
+                <input 
+                    type="password" 
+                    placeholder="Senha" 
+                    v-bind:class="{error: password.hasError}" 
+                    class="input-text" 
+                    v-model="password.text"/>
+                <span class="error-field" v-if="password.hasError">
+                    {{password.error}}
+                </span>
+            </label>
+
+            <button type="submit" class="btn send-login" v-on:click="tryLogin">Entrar</button>
+
+            <div class="login-options">
+                <a href="./signup" class="link">Possui apenas o código de cadastro?</a>
+            </div>
+        </section>
+
+        <span class="loader" v-if="loading"><span class="loader-inner"></span></span>
+    </main>
+
+<script type="text/javascript" src="../js/lib/vue.min.js"></script>
+<script src="../js/lib/axios.min.js"></script>
+<script type="text/javascript" src="../js/constants.js"></script>
+<script type="text/javascript" src="../js/login.js"></script>
+
+</body>
+</html>

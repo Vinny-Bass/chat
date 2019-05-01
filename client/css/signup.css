@@ -1,0 +1,24 @@
+@import url(login.css); 
+
+.signup .login-section {
+    max-width: 640px;
+}
+
+.login.signup .input-label {
+    display: inline-block;
+    margin: 10px;
+}
+
+.signup .input-text {
+    width: 250px;
+    max-width: 100%;
+    height: 40px;
+}
+
+.send-signup {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    width: 250px;
+    max-width: 100%;
+    margin: 20px 10px 10px;
+}
