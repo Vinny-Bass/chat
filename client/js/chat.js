@@ -5,12 +5,11 @@ var app = new Vue({
 
     // Propriedades do aplicativo
     data: {
-        user: 'Anônimo',
+        user: null,
         text: null,
         messages: [],
         ws: null,
         status: null,
-        results: null,
         loading: false
     },
 
@@ -21,17 +20,35 @@ var app = new Vue({
         if(!user)
             document.location.href = APP + "/account"
 
-        this.user = user
-
-        // Inicia a conexão com o websocket
-        this.connect();
-        axios.get("https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=USD,EUR").then(response => {
-            this.results = response.data
-        })
+        this.loading = true
+        let data = {
+            "id": user,
+        }
+        
+        axios
+            .post(SERVER + "user/get_infos.php", data)
+            .then(r => {
+                this.user = r.data.data
+                
+                // Inicia a conexão com o websocket
+                this.connect();
+            })
+            .catch(e => {
+                this.error = e
+            })
+            .finally(() => {
+                this.loading = false
+            })
     },
 
     // Métodos do aplicatvo
     methods: {
+        getAge: function(str){
+            let birthday = new Date(str)
+            let ageDifMs = Date.now() - birthday.getTime()
+            let ageDate = new Date(ageDifMs)
+            return Math.abs(ageDate.getUTCFullYear() - 1970)
+        },
 
         // Método responsável por iniciar conexão com o websocket
         connect: function(onOpen) {
@@ -39,7 +56,7 @@ var app = new Vue({
             var self = this;
 
             // Conectando
-            self.ws = new WebSocket('ws://localhost:8080?u=' + this.user);
+            self.ws = new WebSocket('ws://localhost:8080?u=' + this.user.id);
 
             // Evento que será chamado ao abrir conexão
             self.ws.onopen = function() {
@@ -57,13 +74,12 @@ var app = new Vue({
 
             // Evento que será chamado quando recebido dados do servidor
             self.ws.onmessage = function(e) {
-
                 let result = JSON.parse(e.data);
                 
                 if ((typeof result) !== "string") 
                     self.addMessage(result)
-                else 
-                    console.log(result)
+
+                console.log(result)
             };
 
         },
@@ -93,7 +109,7 @@ var app = new Vue({
             var self = this;
 
             // Se não houver o texto da mensagem ou o nome de usuário
-            if (!self.text || !self.user || self.text.trim().length < 1) {
+            if (!self.text || !self.user.name || self.text.trim().length < 1) {
                 // Saindo do método
                 return;
             }
@@ -116,7 +132,7 @@ var app = new Vue({
 
             // Envia os dados para o servidor através do websocket
             self.ws.send(JSON.stringify({
-                user: self.user,
+                user: self.user.name,
                 text: self.text,
             }));
 
@@ -131,6 +147,10 @@ var app = new Vue({
             container.scrollTop = this.$el.querySelector('#messages').scrollHeight * 5;
         },
 
+        signOut: function() {
+            localStorage.removeItem(USER_KEY)
+            document.location.href = APP + "/account"
+        }
     }
 
 });

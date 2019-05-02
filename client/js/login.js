@@ -35,8 +35,24 @@ var app = new Vue({
             if (!this.validForm())
                 return
             
-            this.setUser(this.mail.text)
-            document.location.href = APP
+            this.loading = true
+            let data = {
+                "email": this.mail.text,
+                "pass": this.password.text
+            }
+
+            axios
+                .post(SERVER + "user/login.php", data)
+                .then(r => {
+                    this.setUser(r.data.data.id)
+                    document.location.href = APP
+                })
+                .catch(e => {
+                    this.error = e
+                })
+                .finally(() => {
+                    this.loading = false
+                })
         },
 
         validForm: function() {

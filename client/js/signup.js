@@ -36,7 +36,8 @@ var app = new Vue({
         research: '',
         collegeDegree: '',
         workLocation: '',
-        loading: false
+        loading: false,
+        error: null
     },
 
     // Quando iniciado o aplicativo
@@ -53,8 +54,31 @@ var app = new Vue({
             if (!this.validForm())
                 return
             
-            this.setUser(this.mail.text)
-            document.location.href = APP
+            this.loading = true
+            let data = {
+                "name": this.name.text,
+                "email": this.mail.text,
+                "pass": this.password.text,
+                "birth": this.birth,
+                "nationality": this.nationality,
+                "title": this.title,
+                "research": this.research,
+                "college_degree": this.collegeDegree,
+                "work_location": this.workLocation
+            }
+
+            axios
+                .post(SERVER + "user/signup.php", data)
+                .then(r => {
+                    this.setUser(r.data.data.id)
+                    document.location.href = APP
+                })
+                .catch(e => {
+                    this.error = e
+                })
+                .finally(() => {
+                    this.loading = false
+                })
         },
 
         validForm: function() {

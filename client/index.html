@@ -15,16 +15,17 @@
     <section id="app" class="chat">
 
         <aside class="user-area">
-            <!--<h3>{{user}}</h3>-->
-            <input type="text" v-model="user" class="input-user-name"/>
-            <span>Doutor</span>
-            <span>Cientista de eventos polares</span>
-            <span>Pinguins</span>
-            <span>Polo Sul - A34</span>
-            <span>19 anos</span>
-            <span>erick@mail.com</span>
-            <span>Brasil</span>
-            <span v-if="results">BTC agora -> ${{results.BTC.USD}}</span>
+            <div v-if="user">
+                <h3>{{user.name}}</h3>
+                <span>{{user.title}}</span>
+                <span>{{user.college_degree}}</span>
+                <span>{{user.research}}</span>
+                <span>{{user.work_location}}</span>
+                <span>{{getAge(user.birth)}} anos</span>
+                <span>{{user.email}}</span>
+                <span>{{user.nationality}}</span>
+            </div>
+            <a class="link" v-on:click="signOut">Sair</a>
         </aside>
 
         <main class="chat-area">
@@ -36,7 +37,7 @@
                 <ul class="messages" v-cloak>
                     <li class="message" 
                     v-for="message in messages"
-                    v-bind:class="{ messageright: user == message.user }">
+                    v-bind:class="{ messageright: user.name == message.user }">
                         <p class="message-header">
                             <i class="seen-icon"></i>
                             <span class="message-header-time" v-if="message.date">{{message.date}}</span>

@@ -114,6 +114,7 @@ body {
 .link {
     color: #0065ff;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .icon {

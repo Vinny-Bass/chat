@@ -1,6 +1,6 @@
 <?php 
 header("Content-Type:application/json");
-require 'data.php'; 
+require 'data.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -13,7 +13,7 @@ if (
 		
 	$result = save_user($data);
 	
-	if (strpos($result, 'Error') !== false) {
+	if (!is_string($result)) {
 		response(200, "User created", $result);
 	}
 	else {
