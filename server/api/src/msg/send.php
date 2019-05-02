@@ -15,8 +15,8 @@ function response($status,$status_message,$data) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if(get_infos($data)) {
-	response(200, "Informações resgatadas", NULL);	
+if($result = send($data)) {
+	response(200, "Mensagem enviada com sucesso", $result);	
 } else {
-	response(200, "Informações sobre o usuario não existem", NULL);
+	response(200, "A mensagem não foi enviada", NULL);
 }
