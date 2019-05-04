@@ -15,24 +15,20 @@ var app = new Vue({
 
     // Quando iniciado o aplicativo
     created: function() {
-        let user = localStorage.getItem(USER_KEY)
-
-        if(!user)
-            document.location.href = APP + "/account"
 
         this.loading = true
-        let data = {
-            "id": user,
-        }
-        
         axios
-            .post(SERVER + "user/get_infos.php", data)
-            .then(r => {
-                this.user = r.data.data
-                
+            .all([
+                this.getUser(),
+                this.getMessages()
+            ])
+            .then(axios.spread((user, messages) => {
+                this.user = user.data.data
+                this.messages = messages.data.data
+                console.log(messages)
                 // Inicia a conexão com o websocket
                 this.connect();
-            })
+            }))
             .catch(e => {
                 this.error = e
             })
@@ -43,6 +39,22 @@ var app = new Vue({
 
     // Métodos do aplicatvo
     methods: {
+        getUser: function(){
+            let user = localStorage.getItem(USER_KEY)
+
+            if(!user)
+                document.location.href = APP + "/account"
+
+            let data = {
+                "id": user,
+            }
+            return axios.post(SERVER + "user/get_infos.php", data)
+        },
+
+        getMessages: function(){
+            return axios.post(SERVER + "msg/get_all.php")
+        },
+
         getAge: function(str){
             let birthday = new Date(str)
             let ageDifMs = Date.now() - birthday.getTime()
@@ -135,6 +147,21 @@ var app = new Vue({
                 user: self.user.name,
                 text: self.text,
             }));
+
+            let data = {
+                id_sender: self.user.id,
+                body: self.text
+            }
+
+            self.loading = false
+            axios
+                .post(SERVER + "msg/send.php", data)
+                .catch(e => {
+                    self.error = e
+                })
+                .finally(() => {
+                    self.loading = false
+                })
 
             // Limpando texto da mensagem
             self.text = null;
