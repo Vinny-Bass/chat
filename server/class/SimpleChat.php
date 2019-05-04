@@ -25,15 +25,19 @@ class SimpleChat implements MessageComponentInterface
     public function onOpen(ConnectionInterface $conn)
     {
         // Adicionando o cliente na coleção e pegando id dele
-        $id = str_replace("u=","",$conn->WebSocket->request->getQuery());
+        $user = str_replace("u=","",utf8_decode(urldecode($conn->WebSocket->request->getQuery())));
+        list($id, $name) = explode(',', $user);
         $conn->app_uid = $id;
+        $conn->app_uname = $name;
         $this->clients->attach($conn);
 
         foreach ($this->clients as $client) {
-            $client->send(json_encode($conn->app_uid));
+            $new_user["id"] = $conn->app_uid;
+            $new_user["name"] = $conn->app_uname;
+            $client->send(json_encode($new_user));
         }
 
-        echo "Cliente conectado ({$conn->app_uid})" . PHP_EOL;
+        echo "{$conn->app_uname} conectado ({$conn->app_uid})" . PHP_EOL;
     }
 
     /**
@@ -51,7 +55,9 @@ class SimpleChat implements MessageComponentInterface
         //Adiciona todos os usuários que visualizaram a mensagem
         $seen = [];
         foreach ($this->clients as $client) {
-            array_push($seen, $client->app_uid);
+            $new_user["id"] = $client->app_uid;
+            $new_user["name"] = $client->app_uname;
+            array_push($seen, $new_user);
         }
         $data->seen = $seen;
 
@@ -61,7 +67,7 @@ class SimpleChat implements MessageComponentInterface
             $client->send(json_encode($data));
         }
 
-        echo "Cliente {$from->app_uid} enviou uma mensagem" . PHP_EOL;
+        echo "{$from->app_uname} enviou uma mensagem" . PHP_EOL;
     }
 
     /**
@@ -73,7 +79,7 @@ class SimpleChat implements MessageComponentInterface
     {
         // Retirando o cliente da coleção
         $this->clients->detach($conn);
-        echo "Cliente {$conn->app_uid} desconectou" . PHP_EOL;
+        echo "{$conn->app_uname} desconectou" . PHP_EOL;
     }
 
     /**

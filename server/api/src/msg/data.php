@@ -22,7 +22,8 @@
 		$limit = $data['limit'] ? intval($data['limit']) : 20;
 		$start = $data['start'] ? $data['start'] : 0;
 
-		$query = "SELECT m.id as id, m.body as text, u.name as user, m.send_time as date FROM 
+		$query = "SELECT 
+				m.id as id, m.body as text, u.name as name, u.id as id_user, m.send_time as date FROM 
 					message m inner join user u on m.id_sender = u.id
 				ORDER BY send_time ASC LIMIT " . $start . ", " . $limit;
 

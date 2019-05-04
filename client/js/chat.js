@@ -25,7 +25,8 @@ var app = new Vue({
             .then(axios.spread((user, messages) => {
                 this.user = user.data.data
                 this.messages = messages.data.data
-                console.log(messages)
+                
+                this.scrollDown();
                 // Inicia a conexão com o websocket
                 this.connect();
             }))
@@ -68,7 +69,7 @@ var app = new Vue({
             var self = this;
 
             // Conectando
-            self.ws = new WebSocket('ws://localhost:8080?u=' + this.user.id);
+            self.ws = new WebSocket('ws://localhost:8080?u=' + this.user.id + ',' + this.user.name);
 
             // Evento que será chamado ao abrir conexão
             self.ws.onopen = function() {
@@ -88,10 +89,10 @@ var app = new Vue({
             self.ws.onmessage = function(e) {
                 let result = JSON.parse(e.data);
                 
-                if ((typeof result) !== "string") 
+                if (result.id == undefined && result.name == undefined) 
                     self.addMessage(result)
-
-                console.log(result)
+                else 
+                    self.newUserOn(result)
             };
 
         },
@@ -100,9 +101,26 @@ var app = new Vue({
         addMessage: function(data) {
             this.messages.push(data);
 
-            setTimeout(()=>{
-                this.scrollDown();
-             },50);
+            this.scrollDown();
+        },
+
+        //Chamado quando um usuário entra no chat
+        newUserOn: function(data) {
+            this.messages.forEach(element => {
+                if(element.seen == undefined)
+                    element.seen = [data]
+                else
+                    element.seen.push(data)
+            })
+
+            console.log(this.messages)
+        },
+
+        whoSeen: function(seen) {
+            if (seen == undefined)
+                return false
+            
+            return true
         },
 
         // Método responsável por adicionar uma notificação de sucesso
@@ -170,8 +188,10 @@ var app = new Vue({
 
         // Método responsável por "rolar" a scroll do chat para baixo
         scrollDown: function() {
-            var container = this.$el.querySelector('#messages');
-            container.scrollTop = this.$el.querySelector('#messages').scrollHeight * 5;
+            setTimeout(()=>{
+                var container = this.$el.querySelector('#messages');
+                container.scrollTop = this.$el.querySelector('#messages').scrollHeight * 5;
+            })
         },
 
         signOut: function() {
