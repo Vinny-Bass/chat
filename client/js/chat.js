@@ -15,6 +15,7 @@ var app = new Vue({
 
     // Quando iniciado o aplicativo
     created: function() {
+        window.addEventListener('beforeunload', this.handler)
 
         this.loading = true
         axios
@@ -114,13 +115,30 @@ var app = new Vue({
             })
 
             console.log(this.messages)
+            app.$forceUpdate();
         },
 
-        whoSeen: function(seen) {
+        whoSeen: function(seen, seeAll) {
+            console.log("clal")
             if (seen == undefined)
                 return false
-            
-            return true
+
+            let allNames = seen.map((element, index) => {
+                if ((seen.length == 1 || seen.length == 2)  && index == 0)
+                    return element.name
+
+                if (index > 3 && !seeAll)
+                    return null
+
+                if (index == 3 && !seeAll)
+                    return ' e mais ' + seen.length - 3
+
+                if (seen.length - 1 == index)
+                    return ' e ' + element.name
+                    
+                return element.name + ', '
+            })
+            return allNames.join('')
         },
 
         // Método responsável por adicionar uma notificação de sucesso
@@ -197,6 +215,10 @@ var app = new Vue({
         signOut: function() {
             localStorage.removeItem(USER_KEY)
             document.location.href = APP + "/account"
+        },
+
+        handler: function () {
+            localStorage.setItem('meuGato', 'Tom')
         }
     }
 

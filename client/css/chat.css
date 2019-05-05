@@ -209,8 +209,9 @@
 }
 
 .seen-who {
-  display: none;
   font-size: 14px;
+  padding-left: 12px;
+  padding-right: 26px;
 }
 
 @media (max-width: 600px) {

@@ -38,12 +38,25 @@
                     <li class="message" 
                     v-for="message in messages"
                     v-bind:class="{ messageright: user.id == message.id_user }">
-                        <p class="message-header">
+                        <div class="message-header">
+                            <i 
+                                class="seen-icon icon" 
+                                v-if="whoSeen(message.seen) !== false"
+                                v-on:mouseover="message.seeWho = true; app.$forceUpdate()"></i>
                             <span class="message-header-time" v-if="message.date">{{message.date}}</span>
                             <strong class="message-header-user" v-if="message.name">{{ message.name }}</strong>
-                        </p>
+                        </div>
+                        <div 
+                            class="seen-who" 
+                            v-if="message.seeWho === true"
+                            v-bind:class="{ seemore: message.seen.length > 2 }"
+                            v-on:click="message.seeMore = message.seeMore === true ? false : true">
+                                <i class="eye-icon icon"></i>
+                                <span v-if="message.seeMore">{{whoSeen(message.seen, true)}}</span>
+                                <span v-else>{{whoSeen(message.seen)}}</span>
+                        </div>
                         <p class="message-body">
-                            {{ message.text }}
+                            {{message.text}}
                         </p> 
                     </li>
                 </ul>
