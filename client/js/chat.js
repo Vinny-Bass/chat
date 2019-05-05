@@ -11,7 +11,8 @@ var app = new Vue({
         ws: null,
         status: null,
         loading: false,
-        hasMore: true
+        hasMore: true,
+        error: null
     },
 
     // Quando iniciado o aplicativo

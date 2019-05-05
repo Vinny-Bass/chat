@@ -17,6 +17,22 @@
     animation: loader-inner 2s infinite ease-in;
 }
 
+.warning-error {
+  background-color: #ff4343cc;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+  margin: 10px;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+.warning-error strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
 @keyframes loader {
   0% {
     transform: rotate(0deg);

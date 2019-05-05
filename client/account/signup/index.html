@@ -14,7 +14,7 @@
 
     <main class="login signup" id="app">
         <h2 class="title">Cadastro</h2>
-
+        <p class="login-desc">Use o código que você recebeu para criar o usuário no nosso chat disponível apenas para pesquisadores e cientistas nos polos do nosso planeta.</p>
         <section class="login-section">
             <div id="code-form">
                 <label class="input-label">
@@ -112,7 +112,7 @@
                 <label class="input-label">
                     <input 
                         type="password" 
-                        placeholder="Senha" 
+                        placeholder="Confirmação de senha" 
                         v-bind:class="{error: password.hasError}" 
                         class="input-text" 
                         v-model="password.confirm"/>
@@ -129,13 +129,14 @@
                 <a href="../" class="link">Já tem usuário?</a>
             </div>
         </section>
-        <span class="loader" v-if="loading"><span class="loader-inner"></span></span>
+        <warning :loading="loading" :error="error"></warning>
     </main>
 
 <script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 <script src="../../js/lib/axios.min.js"></script>
 <script type="text/javascript" src="../../js/constants.js"></script>
 <script type="text/javascript" src="../../js/signup.js"></script>
+<script type="text/javascript" src="../../js/components/warning.js"></script>
 
 </body>
 </html>

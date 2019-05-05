@@ -16,6 +16,13 @@
     margin-top: 30px;
 }
 
+.login-desc {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+    font-weight: bold;
+}
+
 .login .input-label {
     display: block;
 }
@@ -43,6 +50,8 @@
 .login .link {
     font-size: 14px;
     font-weight: bold;
+    color: #fff;
+    text-decoration: underline;
 }
 
 @media (max-width: 600px) {

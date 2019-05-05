@@ -18,7 +18,8 @@ var app = new Vue({
             hasError: false,
             error: ''
         },
-        loading: false
+        loading: false,
+        error: null
     },
 
     // Quando iniciado o aplicativo
@@ -44,6 +45,13 @@ var app = new Vue({
             axios
                 .post(SERVER + "user/login.php", data)
                 .then(r => {
+                    if (r.data.status_message.indexOf("não encontrado") > -1) {
+                        this.mail.hasError = true
+                        this.password.hasError = true
+                        this.password.error = "Senha ou e-mail incorretos, por favor tente novamente"
+                        return
+                    }
+
                     this.setUser(r.data.data.id)
                     document.location.href = APP
                 })

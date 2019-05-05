@@ -44,7 +44,7 @@
                         <div class="message-header">
                             <i 
                                 class="seen-icon icon" 
-                                v-if="whoSeen(message.seen) !== false"
+                                v-if="whoSeen(message.seen)"
                                 v-on:mouseover="message.seeWho = true; app.$forceUpdate()"></i>
                             <span class="message-header-time" v-if="message.date">{{toDate(message.date)}}</span>
                             <strong class="message-header-user" v-if="message.name">{{ message.name }}</strong>
@@ -70,7 +70,7 @@
                 <button class="btn" v-on:click="sendMessage">Enviar</button>
             </div>
 
-            <span class="loader" v-if="loading"><span class="loader-inner"></span></span>
+            <warning :loading="loading" :error="error"></warning>
         </main>
 
     </section>
@@ -79,6 +79,7 @@
     <script src="js/lib/axios.min.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
     <script type="text/javascript" src="js/chat.js"></script>
+    <script type="text/javascript" src="js/components/warning.js"></script>
 
 </body>
 </html>
