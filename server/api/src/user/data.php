@@ -85,4 +85,20 @@
         }
     }
 
+    function set_online($data)
+    {
+        require '../connection.php';
+
+        $id_user = $data['id'];
+        $online = $data['online'];
+
+        $query = "UPDATE user SET online = '$online' WHERE id = '$id_user'";
+
+        if($result = mysqli_query($db, $query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 ?>

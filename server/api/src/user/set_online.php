@@ -15,12 +15,8 @@ function response($status,$status_message,$data) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if($result = get_all($data)) {
-	foreach($result as $key => $msg){
-		$result[$key]['seen'] = get_visualizers($msg['id']);
-	}
-
-	response(200, "Mensagens encontradas", $result);	
+if(set_online($data)) {
+	response(200, "Usuario Online", NULL);	
 } else {
-	response(200, "Nenhuma mensagem encontrada", NULL);
+	response(200, "Usuario Offline", NULL);
 }

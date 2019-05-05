@@ -24,6 +24,7 @@ class SimpleChat implements MessageComponentInterface
      */
     public function onOpen(ConnectionInterface $conn)
     {
+
         // Adicionando o cliente na coleção e pegando id dele
         $user = str_replace("u=","",utf8_decode(urldecode($conn->WebSocket->request->getQuery())));
         list($id, $name) = explode(',', $user);
@@ -36,7 +37,7 @@ class SimpleChat implements MessageComponentInterface
             $new_user["name"] = $conn->app_uname;
             $client->send(json_encode($new_user));
         }
-
+        
         echo "{$conn->app_uname} conectado ({$conn->app_uid})" . PHP_EOL;
     }
 
@@ -48,6 +49,7 @@ class SimpleChat implements MessageComponentInterface
      */
     public function onMessage(ConnectionInterface $from, $data)
     {
+
         // Convertendo os dados recebidos para vetor e adicionando a data
         $data = json_decode($data);
         $data->date = date('d/m/Y H:i:s');
@@ -66,6 +68,8 @@ class SimpleChat implements MessageComponentInterface
         foreach ($this->clients as $client) {
             $client->send(json_encode($data));
         }
+
+        echo teste();
 
         echo "{$from->app_uname} enviou uma mensagem" . PHP_EOL;
     }

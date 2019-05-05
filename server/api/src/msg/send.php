@@ -15,8 +15,12 @@ function response($status,$status_message,$data) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if($result = send($data)) {
-	response(200, "Mensagem enviada com sucesso", $result);	
+if($id_message = send($data)) {
+	$online = getOnlineUsers();
+	foreach ($online as $user){
+		see_message($id_message, $user['id']);
+	}
+	response(200, "Mensagem enviada com sucesso", NULL);	
 } else {
 	response(200, "A mensagem não foi enviada", NULL);
 }
