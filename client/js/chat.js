@@ -10,7 +10,8 @@ var app = new Vue({
         messages: [],
         ws: null,
         status: null,
-        loading: false
+        loading: false,
+        hasMore: true
     },
 
     // Quando iniciado o aplicativo
@@ -25,7 +26,7 @@ var app = new Vue({
             ])
             .then(axios.spread((user, messages) => {
                 this.user = user.data.data
-                this.messages = messages.data.data
+                this.messages = messages.data.data.reverse();
                 
                 this.scrollDown();
                 // Inicia a conexão com o websocket
@@ -57,6 +58,34 @@ var app = new Vue({
             return axios.post(SERVER + "msg/get_all.php")
         },
 
+        getMoreMessages: function(){
+            let count = this.messages.length
+
+            let data = {
+                limit: count + 20,
+                start: count
+            }
+
+            this.loading = true
+
+            axios
+                .post(SERVER + "msg/get_all.php", data)
+                .then(r => {
+                    this.messages = r.data.data.reverse().concat(this.messages);
+                    
+                    if(r.data.data.length < 20)
+                        this.hasMore = false
+                })
+                .catch(e => {
+                    this.error = e
+                })
+                .finally(() => {
+                    this.loading = false
+                })
+
+
+        },
+
         getAge: function(str){
             let birthday = new Date(str)
             let ageDifMs = Date.now() - birthday.getTime()
@@ -67,7 +96,8 @@ var app = new Vue({
         // Método responsável por iniciar conexão com o websocket
         connect: function(onOpen) {
 
-            var self = this;
+            var self = this
+            this.setOnline(true)
 
             // Conectando
             self.ws = new WebSocket('ws://localhost:8080?u=' + this.user.id + ',' + this.user.name);
@@ -90,7 +120,7 @@ var app = new Vue({
             self.ws.onmessage = function(e) {
                 let result = JSON.parse(e.data);
                 
-                if (result.id == undefined && result.name == undefined) 
+                if (result.newUser != true) 
                     self.addMessage(result)
                 else 
                     self.newUserOn(result)
@@ -98,11 +128,24 @@ var app = new Vue({
 
         },
 
+        setOnline: function(online){
+            let data = {
+                id: this.user.id,
+                online: online ? 1 : 0
+            }
+
+            axios
+                .post(SERVER + "user/set_online.php", data)
+                .catch(() => {
+                    window.location.reload(true)
+                })
+        },
+
         // Método responsável por adicionar uma mensagem de usuário
         addMessage: function(data) {
-            this.messages.push(data);
+            this.messages.push(data)
 
-            this.scrollDown();
+            this.scrollDown()
         },
 
         //Chamado quando um usuário entra no chat
@@ -114,14 +157,18 @@ var app = new Vue({
                     element.seen.push(data)
             })
 
-            console.log(this.messages)
             app.$forceUpdate();
         },
 
         whoSeen: function(seen, seeAll) {
-            console.log("clal")
             if (seen == undefined)
                 return false
+
+            seen = seen.filter((thing, index, self) =>
+                index === self.findIndex((t) => (
+                    t.name === thing.name
+                ))
+            )
 
             let allNames = seen.map((element, index) => {
                 if ((seen.length == 1 || seen.length == 2)  && index == 0)
@@ -180,8 +227,9 @@ var app = new Vue({
 
             // Envia os dados para o servidor através do websocket
             self.ws.send(JSON.stringify({
-                user: self.user.name,
+                name: self.user.name,
                 text: self.text,
+                id_user: self.user.id,
             }));
 
             let data = {
@@ -218,7 +266,30 @@ var app = new Vue({
         },
 
         handler: function () {
-            localStorage.setItem('meuGato', 'Tom')
+            this.setOnline(false)
+        },
+
+        toDate: function(str) {
+            if(str.indexOf('/') > -1)
+                return str
+
+            let dateTimeParts= str.split(/[- :]/)
+            dateTimeParts[1]--
+
+            let dateObject = new Date(...dateTimeParts)
+            let month = (dateObject.getMonth() + 1).toString().length == 1 ? 
+                        "0" + (dateObject.getMonth() + 1).toString() : 
+                        (dateObject.getMonth() + 1).toString()
+
+            let date = dateObject.getDate().toString().length == 1 ? 
+                        "0" + dateObject.getDate().toString() :
+                        dateObject.getDate().toString()
+            return date + "/" 
+                    + month + "/" 
+                    + dateObject.getFullYear() + " " 
+                    + dateObject.getHours() + ":"
+                    + dateObject.getMinutes() + ":"
+                    + dateObject.getSeconds()
         }
     }
 

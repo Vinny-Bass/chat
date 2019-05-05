@@ -26,7 +26,7 @@
 					FROM message m 
 					INNER JOIN user u on m.id_sender = u.id 
 					ORDER BY send_time 
-					ASC LIMIT " . $start . ", " . $limit;
+					DESC LIMIT " . $start . ", " . $limit;
 
 		if($result = mysqli_query($db, $query)) {
             return mysqli_fetch_all($result, MYSQLI_ASSOC);

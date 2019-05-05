@@ -214,6 +214,13 @@
   padding-right: 26px;
 }
 
+.get-more-messages {
+  color: #fff;
+  font-weight: bold;
+  display: inline-block;
+  margin: 10px auto 20px;
+}
+
 @media (max-width: 600px) {
   .user-area {
     min-width: 0px;

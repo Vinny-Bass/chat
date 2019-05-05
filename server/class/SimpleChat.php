@@ -35,6 +35,7 @@ class SimpleChat implements MessageComponentInterface
         foreach ($this->clients as $client) {
             $new_user["id"] = $conn->app_uid;
             $new_user["name"] = $conn->app_uname;
+            $new_user["newUser"] = true;
             $client->send(json_encode($new_user));
         }
         
@@ -68,8 +69,6 @@ class SimpleChat implements MessageComponentInterface
         foreach ($this->clients as $client) {
             $client->send(json_encode($data));
         }
-
-        echo teste();
 
         echo "{$from->app_uname} enviou uma mensagem" . PHP_EOL;
     }
