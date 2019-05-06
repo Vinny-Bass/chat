@@ -1,5 +1,5 @@
-const APP = ""
-const SERVER = "3.14.105.238/chat/server/api/src/"
+const APP = "http://3.14.105.238/chat/client/"
+const SERVER = "http://3.14.105.238/chat/server/api/src/"
 const USER_KEY = '__uid'
 
 const MIXIN = {
