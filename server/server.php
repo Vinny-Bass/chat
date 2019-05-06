@@ -15,7 +15,7 @@ $server = IoServer::factory(
             new SimpleChat()
         )
     ),
-    8080
+    80
 );
 
 echo "Server runing..";
