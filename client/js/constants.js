@@ -1,4 +1,4 @@
-const APP = "client/"
+const APP = ""
 const SERVER = "3.14.105.238/chat/server/api/src/"
 const USER_KEY = '__uid'
 
