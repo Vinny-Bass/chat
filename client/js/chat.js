@@ -122,7 +122,7 @@ var app = new Vue({
             this.setOnline(true)
 
             // Conectando
-            self.ws = new WebSocket('ws://3.14.105.238:80?u=' + this.user.id + ',' + this.user.name);
+            self.ws = new WebSocket('ws://3.14.105.238:8080?u=' + this.user.id + ',' + this.user.name);
 
             // Evento que será chamado ao abrir conexão
             self.ws.onopen = function() {
