@@ -70,6 +70,22 @@ var app = new Vue({
             axios
                 .post(SERVER + "user/signup.php", data)
                 .then(r => {
+                    let hasError = false
+                    if (r.data.data.invalid_email) {
+                        this.mail.hasError = true
+                        this.mail.error = "Desculpe, mas esse e-mail já está cadastrado"
+                        hasError = true
+                    }
+
+                    if (r.data.data.invalid_name) {
+                        this.name.hasError = true
+                        this.name.error = "Desculpe, mas esse nome já está cadastrado"
+                        hasError = true
+                    }
+
+                    if (hasError)
+                        return
+
                     this.setUser(r.data.data.id)
                     document.location.href = APP
                 })

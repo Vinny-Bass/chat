@@ -214,6 +214,10 @@
   padding-right: 26px;
 }
 
+.seen-who.seemore {
+  cursor: pointer;
+}
+
 .get-more-messages {
   color: #fff;
   font-weight: bold;

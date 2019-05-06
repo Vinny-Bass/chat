@@ -101,4 +101,30 @@
         }
     }
 
+    function user_exists($u_name, $u_email)
+    {
+        require '../connection.php';
+
+        $query = "SELECT name, email FROM user WHERE name = '$u_name' OR email = '$u_email'";
+
+        $status["invalid_email"] = false;
+        $status["invalid_name"] = false;
+
+        if($result = mysqli_query($db, $query)) {
+            $user = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            foreach($user as $key => $u){
+                if ($u["email"] == $u_email)
+                    $status["invalid_email"] = true;
+                
+                if ($u["name"] == $u_name)
+                    $status["invalid_name"] = true;
+            }
+
+            return $status;
+        } else {
+            return $status;
+        }
+    }
+
 ?>

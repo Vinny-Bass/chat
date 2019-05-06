@@ -27,6 +27,15 @@ var app = new Vue({
             ])
             .then(axios.spread((user, messages) => {
                 this.user = user.data.data
+                if (user.data.data == null) {
+                    this.error = {
+                        message: "Usuário não encontrado, pode ter sido excluido"
+                    }
+                    setTimeout(()=>{
+                        this.signOut()
+                    }, 1000)
+                    return
+                }
                 this.messages = messages.data.data.reverse();
                 
                 this.scrollDown();
@@ -35,6 +44,9 @@ var app = new Vue({
             }))
             .catch(e => {
                 this.error = e
+                setTimeout(()=>{
+                    //this.signOut()
+                }, 1000)
             })
             .finally(() => {
                 this.loading = false
@@ -56,7 +68,12 @@ var app = new Vue({
         },
 
         getMessages: function(){
-            return axios.post(SERVER + "msg/get_all.php")
+            let user = localStorage.getItem(USER_KEY)
+
+            if(!user)
+                document.location.href = APP + "/account"
+
+            return axios.post(SERVER + "msg/get_all.php", {id_getter: user})
         },
 
         getMoreMessages: function(){
@@ -64,7 +81,8 @@ var app = new Vue({
 
             let data = {
                 limit: count + 20,
-                start: count
+                start: count,
+                id_getter: this.user.id
             }
 
             this.loading = true
@@ -73,7 +91,7 @@ var app = new Vue({
                 .post(SERVER + "msg/get_all.php", data)
                 .then(r => {
                     this.messages = r.data.data.reverse().concat(this.messages);
-                    
+                    console.log(r)
                     if(r.data.data.length < 20)
                         this.hasMore = false
                 })
@@ -88,6 +106,9 @@ var app = new Vue({
         },
 
         getAge: function(str){
+            if (!str)
+                return false
+
             let birthday = new Date(str)
             let ageDifMs = Date.now() - birthday.getTime()
             let ageDate = new Date(ageDifMs)
@@ -161,25 +182,29 @@ var app = new Vue({
             app.$forceUpdate();
         },
 
-        whoSeen: function(seen, seeAll) {
-            if (seen == undefined)
-                return false
-
-            seen = seen.filter((thing, index, self) =>
+        removeDuplicatesSeen: function(array) {
+            return array.filter((thing, index, self) =>
                 index === self.findIndex((t) => (
                     t.name === thing.name
                 ))
             )
+        },
+
+        whoSeen: function(seen, seeAll) {
+            if (seen == undefined)
+                return false
+
+            seen = this.removeDuplicatesSeen(seen)
 
             let allNames = seen.map((element, index) => {
                 if ((seen.length == 1 || seen.length == 2)  && index == 0)
                     return element.name
 
                 if (index > 3 && !seeAll)
-                    return null
+                    return ''
 
                 if (index == 3 && !seeAll)
-                    return ' e mais ' + seen.length - 3
+                    return ' e mais ' + (seen.length - 3).toString()
 
                 if (seen.length - 1 == index)
                     return ' e ' + element.name

@@ -21,7 +21,7 @@
                 <span>{{user.college_degree}}</span>
                 <span>{{user.research}}</span>
                 <span>{{user.work_location}}</span>
-                <span>{{getAge(user.birth)}} anos</span>
+                <span v-if="">{{getAge(user.birth)}} anos</span>
                 <span>{{user.email}}</span>
                 <span>{{user.nationality}}</span>
             </div>
@@ -52,8 +52,8 @@
                         <div 
                             class="seen-who" 
                             v-if="message.seeWho === true"
-                            v-bind:class="{ seemore: message.seen.length > 2 }"
-                            v-on:click="message.seeMore = message.seeMore === true ? false : true">
+                            v-bind:class="{ seemore: removeDuplicatesSeen(message.seen).length > 3 }"
+                            v-on:click="message.seeMore = message.seeMore === true ? false : true; app.$forceUpdate()">
                                 <i class="eye-icon icon"></i>
                                 <span v-if="message.seeMore">{{whoSeen(message.seen, true)}}</span>
                                 <span v-else>{{whoSeen(message.seen)}}</span>

@@ -10,15 +10,21 @@ if (
 	isset($data["email"]) &&
 	isset($data["pass"])
 	) {
+		$check_user = user_exists($data["name"], $data["email"]);
+
+		if ($check_user["invalid_email"] || $check_user["invalid_name"]){
+			response(200, "User exists", $check_user);
+			exit;
+		}
 		
-	$result = save_user($data);
-	
-	if (!is_string($result)) {
-		response(200, "User created", $result);
-	}
-	else {
-		response(200, $result, null);
-	}	
+		$result = save_user($data);
+		
+		if (!is_string($result)) {
+			response(200, "User created", $result);
+		}
+		else {
+			response(200, $result, null);
+		}
 }
 else {
 	response(400, "Invalid Request", NULL);

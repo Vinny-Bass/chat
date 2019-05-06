@@ -19,8 +19,8 @@
 	{
 		require '../connection.php';
 		
-		$limit = $data['limit'] ? intval($data['limit']) : 20;
-		$start = $data['start'] ? $data['start'] : 0;
+		$limit = array_key_exists('limit', $data) ? intval($data['limit']) : 20;
+		$start = array_key_exists('start', $data)? $data['start'] : 0;
 
 		$query = "SELECT m.id as id, m.body as text, u.name as name, u.id as id_user, m.send_time as date 
 					FROM message m 
@@ -65,7 +65,7 @@
 	{
 		require '../connection.php';
 
-		$query = "SELECT s.seen_time, u.name
+		$query = "SELECT s.seen_time, u.name, u.id as id_user
 					FROM seen s
 					INNER JOIN message m ON s.id_message = m.id 
 					INNER JOIN user u ON s.id_viewer = u.id
