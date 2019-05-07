@@ -36,7 +36,9 @@ var app = new Vue({
                     }, 1000)
                     return
                 }
-                this.messages = messages.data.data.reverse();
+
+                if (messages.data.status_message !== "Nenhuma mensagem encontrada")
+                    this.messages = messages.data.data.reverse();
                 
                 this.scrollDown();
                 // Inicia a conexão com o websocket
@@ -45,7 +47,7 @@ var app = new Vue({
             .catch(e => {
                 this.error = e
                 setTimeout(()=>{
-                    //this.signOut()
+                    this.signOut()
                 }, 1000)
             })
             .finally(() => {
