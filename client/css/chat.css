@@ -24,7 +24,11 @@
 }
   
   .seen-icon {
-    background-image: url(../img/icon/check-blue.png);
+    background-image: url(../img/icon/check-bold-white.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 15px;
+    width: 15px;
   }
 
   .eye-icon {
