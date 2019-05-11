@@ -7,6 +7,7 @@ var app = new Vue({
     data: {
         user: null,
         text: null,
+        seaLevel: null,
         messages: [],
         ws: null,
         status: null,
@@ -23,9 +24,10 @@ var app = new Vue({
         axios
             .all([
                 this.getUser(),
-                this.getMessages()
+                this.getMessages(),
+                this.getSeaLevel()
             ])
-            .then(axios.spread((user, messages) => {
+            .then(axios.spread((user, messages, seaLevel) => {
                 this.user = user.data.data
                 if (user.data.data == null) {
                     this.error = {
@@ -39,6 +41,8 @@ var app = new Vue({
 
                 if (messages.data.status_message !== "Nenhuma mensagem encontrada")
                     this.messages = messages.data.data.reverse();
+
+                this.seaLevel = seaLevel.data
                 
                 this.scrollDown();
                 // Inicia a conexão com o websocket
@@ -76,6 +80,10 @@ var app = new Vue({
                 document.location.href = APP + "/account"
 
             return axios.post(SERVER + "msg/get_all.php", {id_getter: user})
+        },
+
+        getSeaLevel: function(){
+            return axios.get("https://api.sealevelsensors.org/v1.0/Datastreams(1)/Thing")
         },
 
         getMoreMessages: function(){
@@ -318,6 +326,16 @@ var app = new Vue({
                     + dateObject.getHours() + ":"
                     + dateObject.getMinutes() + ":"
                     + dateObject.getSeconds()
+        },
+
+        currentDate: function(){
+            let currentdate = new Date(); 
+            return currentdate.getDate() + "/"
+                    + (currentdate.getMonth()+1)  + "/" 
+                    + currentdate.getFullYear() + " "  
+                    + currentdate.getHours() + ":"  
+                    + currentdate.getMinutes() + ":" 
+                    + currentdate.getSeconds();
         }
     }
 

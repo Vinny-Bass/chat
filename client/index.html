@@ -25,13 +25,22 @@
                 <span>{{user.email}}</span>
                 <span>{{user.nationality}}</span>
             </div>
-            <a class="link" v-on:click="signOut">Sair</a>
+            <div class="sea-level" v-if="seaLevel && seaLevel.properties">
+                <span>Aumento do nível do mar na America do Norte desde 1988</span>
+                <strong>{{seaLevel.properties.elevationNAVD88.replace(".", ",")}}m</strong>
+                <small>by {{seaLevel.description}}</small>
+                <small>às {{currentDate()}}</small>
+            </div>
         </aside>
 
         <main class="chat-area">
             <header class="chat-header">
-            Ice Breaker | Chat principal
-            <small v-if="status" :style="{ color: status.color }">{{status.text}}</small>
+            Ice Breaker | Comunicação entre bases polares
+            <small v-if="status" :style="{ color: status.color }">
+                {{status.text}}
+                <a class="link" v-on:click="signOut">Sair</a>
+            </small>
+            
             </header>
             <div class="chat-history" id="messages">
                 <ul class="messages" v-cloak>

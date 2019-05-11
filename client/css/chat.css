@@ -229,6 +229,38 @@
   margin: 10px auto 20px;
 }
 
+.sea-level {
+  max-width: 300px;
+  margin: 20px 0;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #325ca4;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.sea-level span {
+  display: inline-block;
+  margin: auto;
+}
+
+.sea-level strong {
+  display: block;
+  font-weight: bold;
+  margin: 10px auto 30px;
+  font-size: 24px;
+}
+
+.sea-level small {
+  font-size: 12px;
+  display: block;
+  text-align: right;
+}
+
+.chat-header small .link {
+  margin-left: 20px;
+}
+
 @media (max-width: 600px) {
   .user-area {
     min-width: 0px;
