@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('America/Sao_Paulo');
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
@@ -50,7 +50,6 @@ class SimpleChat implements MessageComponentInterface
      */
     public function onMessage(ConnectionInterface $from, $data)
     {
-        date_default_timezone_set('America/Sao_Paulo');
 
         // Convertendo os dados recebidos para vetor e adicionando a data
         $data = json_decode($data);
