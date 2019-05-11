@@ -36,7 +36,9 @@ var app = new Vue({
                     }, 1000)
                     return
                 }
-                this.messages = messages.data.data.reverse();
+
+                if (messages.data.status_message !== "Nenhuma mensagem encontrada")
+                    this.messages = messages.data.data.reverse();
                 
                 this.scrollDown();
                 // Inicia a conexão com o websocket
@@ -45,7 +47,7 @@ var app = new Vue({
             .catch(e => {
                 this.error = e
                 setTimeout(()=>{
-                    //this.signOut()
+                    this.signOut()
                 }, 1000)
             })
             .finally(() => {
@@ -122,7 +124,7 @@ var app = new Vue({
             this.setOnline(true)
 
             // Conectando
-            self.ws = new WebSocket('ws://localhost:8080?u=' + this.user.id + ',' + this.user.name);
+            self.ws = new WebSocket('ws://3.14.105.238:8080?u=' + this.user.id + ',' + this.user.name);
 
             // Evento que será chamado ao abrir conexão
             self.ws.onopen = function() {
