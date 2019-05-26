@@ -79,7 +79,7 @@
                 <button class="btn" v-on:click="sendMessage">Enviar</button>
             </div>
 
-            <warning :loading="loading" :error="error"></warning>
+            <warning :loading="loading" :error="error" @clear="error = null"></warning>
         </main>
 
     </section>

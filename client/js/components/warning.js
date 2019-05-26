@@ -6,7 +6,8 @@ Vue.component('warning', {
     watch: {
         error: function(){
             setTimeout(()=>{
-                this.error = false;
+                this.error = false
+                this.$emit('clear')
             }, 2000)
         }
     },
