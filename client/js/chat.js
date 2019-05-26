@@ -24,10 +24,9 @@ var app = new Vue({
         axios
             .all([
                 this.getUser(),
-                this.getMessages(),
-                this.getSeaLevel()
+                this.getMessages()
             ])
-            .then(axios.spread((user, messages, seaLevel) => {
+            .then(axios.spread((user, messages) => {
                 this.user = user.data.data
                 if (user.data.data == null) {
                     this.error = {
@@ -41,10 +40,9 @@ var app = new Vue({
 
                 if (messages.data.status_message !== "Nenhuma mensagem encontrada")
                     this.messages = messages.data.data.reverse();
-
-                this.seaLevel = seaLevel.data
                 
-                this.scrollDown();
+                this.scrollDown()
+                this.getSeaLevel()
                 // Inicia a conexão com o websocket
                 this.connect();
             }))
@@ -83,7 +81,14 @@ var app = new Vue({
         },
 
         getSeaLevel: function(){
-            return axios.get("https://api.sealevelsensors.org/v1.0/Datastreams(1)/Thing")
+            axios
+                .get("https://api.sealevelsensors.org/v1.0/Datastreams(1)/Thing")
+                .then(r => {
+                    this.seaLevel = r.data
+                }).catch(e => {
+                    e.message = "Falha ao carregar nível do mar, API fora do ar"
+                    this.error = e
+                })
         },
 
         getMoreMessages: function(){
